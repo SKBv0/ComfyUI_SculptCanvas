@@ -1,0 +1,44 @@
+:root {
+    --sculpt-surface-0: #0b0d10;
+    --sculpt-text: #d9dfeb;
+    --sculpt-accent: #67d8ff;
+    --sculpt-border: rgba(255, 255, 255, 0.1);
+    --sculpt-focus-ring: 0 0 0 2px #0b0d10, 0 0 0 4px #67d8ff;
+}
+
+.sculpt-app {
+    container-type: inline-size;
+    color: var(--sculpt-text);
+    background: var(--sculpt-surface-0);
+}
+
+.sculpt-app button:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--sculpt-accent) 45%, var(--sculpt-border));
+}
+
+.sculpt-app button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.sculpt-app button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.sculpt-app button:focus-visible,
+.sculpt-app [tabindex]:focus-visible,
+.sculpt-app canvas:focus-visible {
+    outline: none;
+    box-shadow: var(--sculpt-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sculpt-app *,
+    .sculpt-app *::before,
+    .sculpt-app *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

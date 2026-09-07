@@ -1,0 +1,327 @@
+{
+ "sphere:1": {
+  "bbox": [
+   -1,
+   -1,
+   -1,
+   1,
+   1,
+   1
+  ],
+  "faceIndexCount": 672,
+  "faceIndexSum": 37968,
+  "vertexCount": 114
+ },
+ "sphere:2": {
+  "bbox": [
+   -1,
+   -1,
+   -1,
+   1,
+   1,
+   1
+  ],
+  "faceIndexCount": 2880,
+  "faceIndexSum": 692640,
+  "vertexCount": 482
+ },
+ "sphere:3": {
+  "bbox": [
+   -1,
+   -1,
+   -1,
+   1,
+   1,
+   1
+  ],
+  "faceIndexCount": 11904,
+  "faceIndexSum": 11814720,
+  "vertexCount": 1986
+ },
+ "sphere:4": {
+  "bbox": [
+   -1,
+   -1,
+   -1,
+   1,
+   1,
+   1
+  ],
+  "faceIndexCount": 48384,
+  "faceIndexSum": 195108480,
+  "vertexCount": 8066
+ },
+ "sphere:5": {
+  "bbox": [
+   -1,
+   -1,
+   -1,
+   1,
+   1,
+   1
+  ],
+  "faceIndexCount": 195072,
+  "faceIndexSum": 3171187968,
+  "vertexCount": 32514
+ },
+ "cube:1": {
+  "bbox": [
+   -0.5,
+   -0.5,
+   -0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "faceIndexCount": 144,
+  "faceIndexSum": 1848,
+  "vertexCount": 26
+ },
+ "cube:2": {
+  "bbox": [
+   -0.5,
+   -0.5,
+   -0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "faceIndexCount": 576,
+  "faceIndexSum": 28224,
+  "vertexCount": 98
+ },
+ "cube:3": {
+  "bbox": [
+   -0.5,
+   -0.5,
+   -0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "faceIndexCount": 2304,
+  "faceIndexSum": 444864,
+  "vertexCount": 386
+ },
+ "cube:4": {
+  "bbox": [
+   -0.5,
+   -0.5,
+   -0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "faceIndexCount": 9216,
+  "faceIndexSum": 7088256,
+  "vertexCount": 1538
+ },
+ "cube:5": {
+  "bbox": [
+   -0.5,
+   -0.5,
+   -0.5,
+   0.5,
+   0.5,
+   0.5
+  ],
+  "faceIndexCount": 36864,
+  "faceIndexSum": 113288448,
+  "vertexCount": 6146
+ },
+ "cylinder:1": {
+  "bbox": [
+   -0.5,
+   -0.8,
+   -0.5,
+   0.5,
+   0.8,
+   0.5
+  ],
+  "faceIndexCount": 72,
+  "faceIndexSum": 452,
+  "vertexCount": 14
+ },
+ "cylinder:2": {
+  "bbox": [
+   -0.5,
+   -0.8,
+   -0.5,
+   0.5,
+   0.8,
+   0.5
+  ],
+  "faceIndexCount": 240,
+  "faceIndexSum": 5016,
+  "vertexCount": 42
+ },
+ "cylinder:3": {
+  "bbox": [
+   -0.5,
+   -0.8,
+   -0.5,
+   0.5,
+   0.8,
+   0.5
+  ],
+  "faceIndexCount": 864,
+  "faceIndexSum": 64112,
+  "vertexCount": 146
+ },
+ "cylinder:4": {
+  "bbox": [
+   -0.5,
+   -0.8,
+   -0.5,
+   0.5,
+   0.8,
+   0.5
+  ],
+  "faceIndexCount": 3264,
+  "faceIndexSum": 903648,
+  "vertexCount": 546
+ },
+ "cylinder:5": {
+  "bbox": [
+   -0.5,
+   -0.8,
+   -0.5,
+   0.5,
+   0.8,
+   0.5
+  ],
+  "faceIndexCount": 12672,
+  "faceIndexSum": 13510592,
+  "vertexCount": 2114
+ },
+ "torus:1": {
+  "bbox": [
+   -1.1,
+   -1.1,
+   -0.3,
+   1.1,
+   1.1,
+   0.3
+  ],
+  "faceIndexCount": 96,
+  "faceIndexSum": 720,
+  "vertexCount": 16
+ },
+ "torus:2": {
+  "bbox": [
+   -1.1,
+   -1.1,
+   -0.3,
+   1.1,
+   1.1,
+   0.3
+  ],
+  "faceIndexCount": 384,
+  "faceIndexSum": 12096,
+  "vertexCount": 64
+ },
+ "torus:3": {
+  "bbox": [
+   -1.1,
+   -1.1,
+   -0.3,
+   1.1,
+   1.1,
+   0.3
+  ],
+  "faceIndexCount": 1536,
+  "faceIndexSum": 195840,
+  "vertexCount": 256
+ },
+ "torus:4": {
+  "bbox": [
+   -1.1,
+   -1.1,
+   -0.3,
+   1.1,
+   1.1,
+   0.3
+  ],
+  "faceIndexCount": 6144,
+  "faceIndexSum": 3142656,
+  "vertexCount": 1024
+ },
+ "torus:5": {
+  "bbox": [
+   -1.1,
+   -1.1,
+   -0.3,
+   1.1,
+   1.1,
+   0.3
+  ],
+  "faceIndexCount": 24576,
+  "faceIndexSum": 50319360,
+  "vertexCount": 4096
+ },
+ "plane:1": {
+  "bbox": [
+   -1,
+   0,
+   -1,
+   1,
+   0,
+   1
+  ],
+  "faceIndexCount": 96,
+  "faceIndexSum": 1152,
+  "vertexCount": 25
+ },
+ "plane:2": {
+  "bbox": [
+   -1,
+   0,
+   -1,
+   1,
+   0,
+   1
+  ],
+  "faceIndexCount": 384,
+  "faceIndexSum": 15360,
+  "vertexCount": 81
+ },
+ "plane:3": {
+  "bbox": [
+   -1,
+   0,
+   -1,
+   1,
+   0,
+   1
+  ],
+  "faceIndexCount": 1536,
+  "faceIndexSum": 221184,
+  "vertexCount": 289
+ },
+ "plane:4": {
+  "bbox": [
+   -1,
+   0,
+   -1,
+   1,
+   0,
+   1
+  ],
+  "faceIndexCount": 6144,
+  "faceIndexSum": 3342336,
+  "vertexCount": 1089
+ },
+ "plane:5": {
+  "bbox": [
+   -1,
+   0,
+   -1,
+   1,
+   0,
+   1
+  ],
+  "faceIndexCount": 24576,
+  "faceIndexSum": 51904512,
+  "vertexCount": 4225
+ }
+}

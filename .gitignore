@@ -1,0 +1,14 @@
+node_modules/
+__pycache__/
+.claude/
+*.pyc
+*.timestamp-*.mjs
+.vite/
+.ruff_cache/
+
+# Local test meshes, kept on disk for development, never published
+*.fbx
+*.glb
+
+# comfy node publish output
+node.zip

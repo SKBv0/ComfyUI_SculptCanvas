@@ -1,0 +1,15 @@
+# Development and CI
+.github/
+.gitignore
+tests/
+scripts/
+package.json
+package-lock.json
+vitest.config.js
+node_modules/
+
+# Generated and local artifacts
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.claude/

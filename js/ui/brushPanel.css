@@ -1,0 +1,960 @@
+/* BrushPanel styles. All selectors are scoped to the Sculpt surface. */
+        .sculpt-zpanel, .sculpt-zpanel * {
+            box-sizing: border-box;
+        }
+
+        /* Icon rail on the left, opened sections stacking in a flyout beside
+           it. The rail is always visible; the flyout only takes layout space
+           while at least one section is open (.has-open-section), so the
+           viewport is not permanently covered by a tall panel. */
+        .sculpt-zpanel {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            /* top + bottom, not max-height. A percentage max-height on the rail
+               and flyout only resolves against a parent with a DEFINITE height;
+               with an auto height it computes to 'none', which is why long card
+               stacks spilled past the node instead of scrolling. The bottom
+               offset keeps the rail and flyout scrollable at short node
+               heights. The shortcut footer is a sibling below the viewport,
+               so no overlay allowance is needed here. */
+            bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+            width: auto;
+            max-width: calc(100% - 12px);
+            background: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            overflow: visible;
+            z-index: 100;
+            font-family: "Manrope", "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+            font-size: 10px;
+            color: #9d9aa0;
+            user-select: none;
+        }
+
+        /* The panel box now spans the viewport height purely to bound its
+           children, so it must not swallow pointer events meant for the canvas.
+           Scoped to the toolbar container to outrank its
+           '> * { pointer-events: auto }' rule. */
+        .sculpt-toolbar-container > .sculpt-zpanel {
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-rail,
+        .sculpt-zpanel-flyout {
+            pointer-events: auto;
+        }
+
+        .sculpt-zpanel-rail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            flex: 0 0 auto;
+            padding: 4px;
+            border-radius: 9px;
+            background: rgba(24, 24, 28, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 32px -14px rgba(0, 0, 0, 0.7);
+            max-height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+        }
+
+        .sculpt-zpanel-rail::-webkit-scrollbar { width: 0; }
+
+        .sculpt-zpanel-rail-btn {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: #7d7883;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .sculpt-zpanel-rail-btn .sculpt-zpanel-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .sculpt-zpanel-rail-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #cdc6bd;
+        }
+
+        .sculpt-zpanel-rail-btn.is-active {
+            background: rgba(198, 123, 92, 0.18);
+            color: #e9b195;
+            box-shadow: inset 0 0 0 1px rgba(198, 123, 92, 0.34);
+        }
+
+        .sculpt-zpanel-rail-btn:disabled {
+            opacity: 0.32;
+            pointer-events: none;
+        }
+
+        /* Undo/redo pair sits with the rail buttons, just separated by a rule. */
+        .sculpt-zpanel-quickbar {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-bottom: 3px;
+            margin-bottom: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .sculpt-zpanel-flyout {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            width: min(184px, 100%);
+            max-height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(132, 150, 176, 0.45) rgba(255, 255, 255, 0.04);
+        }
+
+        .sculpt-zpanel.has-open-section .sculpt-zpanel-flyout {
+            display: flex;
+        }
+
+        .sculpt-zpanel-card {
+            flex: 0 0 auto;
+            padding: 5px 7px 6px;
+            border-radius: 8px;
+            background: rgba(24, 24, 28, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 16px 32px -14px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Both classes: .sculpt-zpanel-label sets margin:0 further down the
+           sheet, so a single-class selector here loses and the heading ends up
+           flush against its controls. */
+        .sculpt-zpanel-label.sculpt-zpanel-card-title {
+            margin-bottom: 6px;
+            opacity: 0.85;
+        }
+
+        .sculpt-zpanel-flyout::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .sculpt-zpanel-flyout::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 999px;
+        }
+
+        .sculpt-zpanel-flyout::-webkit-scrollbar-thumb {
+            background: rgba(132, 150, 176, 0.42);
+            border-radius: 999px;
+        }
+
+        /* In the rail the header is just the brand badge; it toggles the
+           whole flyout so the viewport can be cleared in one click. */
+        .sculpt-zpanel-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            flex: 0 0 auto;
+            margin-bottom: 2px;
+            padding: 0;
+            background: none;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .sculpt-zpanel-title,
+        .sculpt-zpanel-header-chevron {
+            display: none;
+        }
+
+        .sculpt-zpanel-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Collapse clears the flyout but keeps the rail reachable. */
+        .sculpt-zpanel.is-panel-collapsed .sculpt-zpanel-flyout {
+            display: none !important;
+        }
+
+        .sculpt-zpanel-badge {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            background: linear-gradient(145deg, #b26f52, #95513a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 1px 4px rgba(198, 123, 92, 0.24),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+            flex-shrink: 0;
+        }
+
+        .sculpt-zpanel-badge::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.4);
+            transform: rotate(45deg);
+        }
+
+        .sculpt-zpanel-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #e4e0da;
+            letter-spacing: -0.1px;
+        }
+
+        /* Collapsible section header (button) */
+        .sculpt-zpanel-sec-body {
+            min-width: 0;
+        }
+
+        .sculpt-zpanel-label {
+            flex: 0 0 auto;
+            color: #8f8893;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: none;
+            margin: 0;
+            position: relative;
+        }
+
+        .sculpt-zpanel-preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 3px;
+        }
+
+        .sculpt-zpanel-preset {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 1px;
+            min-height: 30px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 255, 255, 0.024);
+            box-shadow:
+                inset 0 1px 2px rgba(0, 0, 0, 0.16),
+                0 1px 0 rgba(255, 255, 255, 0.02);
+            color: #726d76;
+            cursor: pointer;
+            transition: background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+            text-align: left;
+        }
+
+        .sculpt-zpanel-preset:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e8e2d8;
+            box-shadow:
+                inset 0 1px 2px rgba(0, 0, 0, 0.14),
+                0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .sculpt-zpanel-preset-name {
+            font-size: 9px;
+            font-weight: 600;
+            color: #d8d2c9;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .sculpt-zpanel-preset.is-active {
+            border-color: rgba(255, 140, 90, 0.75);
+            background: rgba(255, 120, 70, 0.14);
+            color: #ffd9c7;
+        }
+
+        .sculpt-zpanel-segmented {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            padding: 2px;
+            border-radius: 7px;
+            background: rgba(8, 9, 12, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28);
+        }
+
+        /* Two-class selector: must beat .sculpt-zpanel-btn's aspect-ratio: 1
+           regardless of rule order (same cascade trap as the mask chips). */
+        .sculpt-zpanel-text {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 22px;
+            margin-bottom: 6px;
+            padding: 0 6px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.28);
+            color: #d4cdc4;
+            font: inherit;
+            font-size: 9px;
+            letter-spacing: 0.02em;
+            outline: none;
+        }
+
+        .sculpt-zpanel-text:focus-visible {
+            border-color: #67d8ff;
+        }
+
+        .sculpt-zpanel-btn.sculpt-zpanel-seg-btn {
+            aspect-ratio: auto;
+            min-height: 22px;
+            padding: 0 2px;
+            border-radius: 5px;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #8a8490;
+        }
+
+        .sculpt-zpanel-seg-btn:hover {
+            color: #d4cdc4;
+        }
+
+        .sculpt-zpanel-seg-btn.is-active {
+            background: linear-gradient(180deg, rgba(42, 40, 46, 0.95), rgba(28, 27, 32, 0.98));
+            color: #C67B5C;
+            box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .sculpt-zpanel-mask-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2px;
+        }
+
+        /* Two-class selector: must beat .sculpt-zpanel-btn's aspect-ratio: 1
+           regardless of rule order, otherwise chips blow up into squares. */
+        .sculpt-zpanel-btn.sculpt-zpanel-chip {
+            aspect-ratio: auto;
+            min-height: 22px;
+            padding: 3px 4px;
+            border-radius: 5px;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Five columns fits the ten brushes into exactly two rows, a 4-wide
+           grid left a half-empty third row. Height is fixed rather than
+           aspect-ratio:1 so the cells stay compact as the panel widens. */
+        .sculpt-zpanel-brush-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+        }
+
+        .sculpt-zpanel-brush-grid .sculpt-zpanel-btn {
+            aspect-ratio: auto;
+            height: 27px;
+        }
+
+        .sculpt-zpanel-brush-grid .sculpt-zpanel-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .sculpt-zpanel-btn {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: none;
+            background: rgba(255, 255, 255, 0.022);
+            box-shadow:
+                inset 0 1px 2px rgba(0,0,0,0.16),
+                0 1px 0 rgba(255,255,255,0.02);
+            color: #726d76;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sculpt-zpanel-btn:hover {
+            background: rgba(255, 255, 255, 0.045);
+            color: #d1c9be;
+            box-shadow:
+                inset 0 1px 2px rgba(0,0,0,0.15),
+                0 1px 0 rgba(255,255,255,0.03);
+        }
+
+        .sculpt-zpanel-btn.is-active {
+            background: linear-gradient(145deg, rgba(198, 123, 92, 0.2), rgba(198, 123, 92, 0.1));
+            color: #C67B5C;
+            box-shadow:
+                inset 0 0 0 1px rgba(198, 123, 92, 0.2),
+                0 0 12px rgba(198, 123, 92, 0.08);
+        }
+
+        .sculpt-zpanel-icon {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* Sliders are label-over-track rather than framed cards: three stacked
+           cards cost roughly twice the height for decoration the panel does not
+           need. The track keeps full width so dragging stays precise. */
+        .sculpt-zpanel-slider {
+            margin: 0 0 3px;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            background: none;
+            box-shadow: none;
+        }
+
+        .sculpt-zpanel-slider-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 8.5px;
+            font-weight: 600;
+            color: #7b756c;
+            margin-bottom: 0;
+            letter-spacing: 0.28px;
+        }
+
+        .sculpt-zpanel-slider-value {
+            color: #f2e7d7;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            min-width: 26px;
+            text-align: right;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            background: none;
+        }
+
+        .sculpt-zpanel-range {
+            appearance: none;
+            width: 100%;
+            height: 12px;
+            background: transparent;
+            outline: none;
+            --range-progress: 50%;
+            --range-fill-a: #d5977f;
+            --range-fill-b: #b96b4c;
+            --range-empty: rgba(255,255,255,0.07);
+            --range-thumb: #d4947a;
+            --range-thumb-glow: rgba(212,148,122,0.35);
+        }
+
+        .sculpt-zpanel-range::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 999px;
+            background:
+                linear-gradient(90deg,
+                    var(--range-fill-a) 0%,
+                    var(--range-fill-b) var(--range-progress),
+                    var(--range-empty) var(--range-progress),
+                    var(--range-empty) 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
+        }
+
+        .sculpt-zpanel-range::-moz-range-track {
+            height: 6px;
+            border-radius: 999px;
+            background:
+                linear-gradient(90deg,
+                    var(--range-fill-a) 0%,
+                    var(--range-fill-b) var(--range-progress),
+                    var(--range-empty) var(--range-progress),
+                    var(--range-empty) 100%);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
+        }
+
+        .sculpt-zpanel-range::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 28%, #ffffff 0%, #f9f9f9 16%, var(--range-thumb) 46%, #7e6b5f 100%);
+            cursor: pointer;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.25) inset,
+                0 3px 10px var(--range-thumb-glow),
+                0 1px 3px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.28);
+            margin-top: -5px;
+            transition: transform 0.16s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.2s ease;
+        }
+
+        .sculpt-zpanel-range::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--range-thumb);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.28);
+            box-shadow:
+                0 3px 10px var(--range-thumb-glow),
+                0 1px 3px rgba(0,0,0,0.45);
+            transition: transform 0.16s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.2s ease;
+        }
+
+        .sculpt-zpanel-range::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.3) inset,
+                0 5px 14px var(--range-thumb-glow),
+                0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .sculpt-zpanel-range::-moz-range-thumb:hover {
+            transform: scale(1.18);
+            box-shadow:
+                0 5px 14px var(--range-thumb-glow),
+                0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .sculpt-zpanel-range:focus-visible::-webkit-slider-thumb {
+            box-shadow:
+                0 0 0 2px rgba(255,255,255,0.3),
+                0 5px 14px var(--range-thumb-glow),
+                0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .sculpt-zpanel-range:focus-visible::-moz-range-thumb {
+            box-shadow:
+                0 0 0 2px rgba(255,255,255,0.3),
+                0 5px 14px var(--range-thumb-glow),
+                0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .sculpt-zpanel-light-control {
+            margin: 3px 0 4px;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid rgba(120, 194, 255, 0.11);
+            background:
+                radial-gradient(circle at 50% 10%, rgba(116, 194, 255, 0.07), transparent 72%),
+                linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008)),
+                rgba(10, 14, 20, 0.58);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.025),
+                0 8px 18px -14px rgba(0,0,0,0.82);
+        }
+
+        .sculpt-zpanel-light-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            color: #95a5b6;
+            font-size: 8px;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .sculpt-zpanel-light-readout {
+            padding: 1px 5px;
+            border-radius: 999px;
+            border: 1px solid rgba(146, 202, 255, 0.25);
+            background: rgba(16, 24, 34, 0.8);
+            color: #dbf1ff;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .sculpt-zpanel-light-pad {
+            position: relative;
+            height: 54px;
+            border-radius: 7px;
+            border: 1px solid rgba(132, 187, 240, 0.22);
+            background:
+                linear-gradient(90deg, rgba(142, 191, 237, 0.06) 0 1px, transparent 1px 100%),
+                linear-gradient(180deg, rgba(142, 191, 237, 0.06) 0 1px, transparent 1px 100%),
+                radial-gradient(circle at center, rgba(126, 188, 242, 0.18), rgba(13, 19, 27, 0.88) 64%);
+            background-size: 25% 100%, 100% 25%, 100% 100%;
+            cursor: crosshair;
+            user-select: none;
+            touch-action: none;
+            overflow: hidden;
+        }
+
+        .sculpt-zpanel-light-pad::before,
+        .sculpt-zpanel-light-pad::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-light-pad::before {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(170, 209, 243, 0.2);
+            transform: translateX(-0.5px);
+        }
+
+        .sculpt-zpanel-light-pad::after {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(170, 209, 243, 0.2);
+            transform: translateY(-0.5px);
+        }
+
+        .sculpt-zpanel-light-knob {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.85);
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #9ad8ff 45%, #4ea2d6 100%);
+            box-shadow:
+                0 0 0 2px rgba(107, 192, 255, 0.18),
+                0 4px 10px rgba(44, 122, 178, 0.45);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-light-footer {
+            margin-top: 4px;
+        }
+
+        .sculpt-zpanel-light-power-track {
+            position: relative;
+            height: 22px;
+            border-radius: 6px;
+            border: 1px solid rgba(123, 185, 241, 0.24);
+            background: rgba(17, 27, 38, 0.8);
+            overflow: hidden;
+            cursor: ew-resize;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .sculpt-zpanel-light-power-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 50%;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(124, 206, 255, 0.48), rgba(79, 168, 221, 0.72));
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-light-power-knob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255,255,255,0.85);
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #9ad8ff 45%, #4ea2d6 100%);
+            box-shadow:
+                0 0 0 2px rgba(107, 192, 255, 0.18),
+                0 4px 10px rgba(44, 122, 178, 0.45);
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-light-power {
+            position: relative;
+            z-index: 2; /* readable above the knob at any position */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #d6efff;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            font-variant-numeric: tabular-nums;
+            text-shadow:
+                0 1px 3px rgba(0,0,0,0.75),
+                0 0 6px rgba(0,0,0,0.55);
+            pointer-events: none;
+        }
+
+        .sculpt-zpanel-symmetry {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px;
+        }
+
+        /* Eight swatches on one row: colour is recognisable well below the
+           ~34px the old 4-column grid spent on each, and it saves a whole row. */
+        .sculpt-zpanel-materials {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+        }
+
+        .sculpt-zpanel-lighting {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3px;
+        }
+
+        .sculpt-zpanel-rig {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 3px;
+            padding: 4px 3px 5px;
+            margin: 0;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            cursor: pointer;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%),
+                rgba(12, 13, 17, 0.55);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 2px 8px -6px rgba(0, 0, 0, 0.6);
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .sculpt-zpanel-rig:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.07),
+                0 3px 10px -8px rgba(0, 0, 0, 0.5);
+        }
+
+        .sculpt-zpanel-rig.is-active {
+            border-color: rgba(198, 123, 92, 0.55);
+            box-shadow:
+                inset 0 0 0 1px rgba(198, 123, 92, 0.22),
+                0 0 0 1px rgba(198, 123, 92, 0.1),
+                0 4px 14px -10px rgba(198, 123, 92, 0.22);
+        }
+
+        .sculpt-zpanel-rig-preview {
+            height: 11px;
+            border-radius: 4px;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        .sculpt-zpanel-rig-label {
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #9a959e;
+            text-align: center;
+            line-height: 1.15;
+            hyphens: auto;
+            overflow-wrap: anywhere;
+        }
+
+        .sculpt-zpanel-rig:hover .sculpt-zpanel-rig-label {
+            color: #c9c3cd;
+        }
+
+        .sculpt-zpanel-rig.is-active .sculpt-zpanel-rig-label {
+            color: #ebe6df;
+        }
+
+        .sculpt-zpanel-swatch {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow:
+                inset 0 2px 4px rgba(0,0,0,0.3),
+                0 1px 0 rgba(255,255,255,0.03);
+            position: relative;
+        }
+
+        .sculpt-zpanel-materials .sculpt-zpanel-swatch {
+            width: 100%;
+            justify-self: center;
+        }
+
+        .sculpt-zpanel-swatch::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .sculpt-zpanel-swatch:hover::after {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .sculpt-zpanel-swatch.is-active::after {
+            border-color: #C67B5C;
+        }
+
+        .sculpt-zpanel-symmetry .sculpt-zpanel-btn {
+            aspect-ratio: auto;
+            min-height: 24px;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 0.35px;
+            text-transform: uppercase;
+        }
+
+        .sculpt-zpanel-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .sculpt-zpanel-texture-block {
+            grid-column: 1 / -1;
+            margin-bottom: 2px;
+        }
+
+        .sculpt-zpanel-texture-block .sculpt-zpanel-label {
+            margin-top: 0;
+            margin-bottom: 2px;
+        }
+
+        .sculpt-zpanel-texture-sublabel {
+            font-size: 8px;
+            line-height: 1.3;
+            color: #5c5860;
+            margin: 0 0 5px 1px;
+            letter-spacing: 0.2px;
+        }
+
+        .sculpt-zpanel-texture-hint {
+            font-size: 9px;
+            line-height: 1.45;
+            color: #8a8690;
+            padding: 2px 2px 4px;
+        }
+
+        .sculpt-zpanel-texture-hint strong {
+            color: #a09ca4;
+            font-weight: 600;
+        }
+
+        .sculpt-zpanel-import-status {
+            grid-column: 1 / -1;
+            padding: 5px 7px;
+            border: 1px solid rgba(255, 116, 116, 0.42);
+            border-radius: 7px;
+            background: rgba(66, 20, 26, 0.42);
+            color: #ffd7d7;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .sculpt-zpanel-import-status[data-kind="warning"] {
+            border-color: rgba(235, 185, 92, 0.42);
+            background: rgba(70, 48, 15, 0.38);
+            color: #ffe4ad;
+        }
+
+        .sculpt-zpanel-import-status[data-kind="success"] {
+            border-color: rgba(91, 196, 153, 0.38);
+            background: rgba(17, 61, 47, 0.36);
+            color: #c7f7e3;
+        }
+
+        .sculpt-zpanel-texture-block > .sculpt-zpanel-btn {
+            width: 100%;
+        }
+
+        .sculpt-zpanel-actions .sculpt-zpanel-btn {
+            aspect-ratio: auto;
+            height: 26px;
+            font-size: 9px;
+            font-weight: 600;
+            gap: 4px;
+        }
+
+        /* Undo/Redo quick bar, always visible under the header. */
+        /* Tooltip (scoped to the sculpt panel so other extensions' tooltips are untouched) */
+        .sculpt-zpanel [data-tooltip] {
+            position: relative;
+        }
+
+        /* The tooltip lives on document.body, not as a ::before inside the
+           panel. The panel scrolls with overflow-x:hidden and section bodies
+           clip while collapsing, so an in-flow pseudo-element got cut off at
+           the panel edge. A fixed-position node escapes every clipping
+           ancestor, and BrushPanel flips it to the other side when it would
+           run past the viewport. */
+        .sculpt-zpanel-tip {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 2147483000;
+            max-width: 230px;
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: #26262a;
+            color: #ded8d0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+            font: 500 10px/1.4 "Manrope", "Segoe UI", system-ui, sans-serif;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.12s ease;
+        }
+
+        .sculpt-zpanel-tip.is-visible {
+            opacity: 1;
+        }
+
+        .sculpt-zpanel-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sculpt-zpanel,
+            .sculpt-zpanel-btn,
+            .sculpt-zpanel-swatch,
+            .sculpt-zpanel-tip {
+                transition: none !important;
+            }
+            .sculpt-zpanel-range::-webkit-slider-thumb:hover {
+                transform: none;
+            }
+            .sculpt-zpanel-range::-moz-range-thumb:hover {
+                transform: none;
+            }
+        }

@@ -1,0 +1,14 @@
+{
+  "name": "comfyui-sculpt-canvas",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "build:mesh": "esbuild scripts/parseThreeMeshEntry.js --bundle --format=esm --platform=browser --minify --banner:js=\"/*! Bundles three.js (MIT License, Copyright (c) 2010-2023 three.js authors). Full license text in README.md */\" --outfile=js/mesh/parseMeshThree.bundle.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.160.1",
+    "vitest": "^4.1.10"
+  }
+}
